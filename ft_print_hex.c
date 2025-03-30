@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	print_hexupp(long n, unsigned int base)
+/* int	print_hexupp(long n, unsigned int base)
 {
 	int			count;
 	const char	*symbols;
@@ -38,9 +38,9 @@ int	print_unshex(unsigned long long n, unsigned int base)
 	n = symbols[n % base];
 	count += write(1, &n, 1);
 	return (count);
-}
+} */
 
-int	print_hex(unsigned long long n, unsigned int base, char conversion)
+/* int	print_hex(unsigned long long n, unsigned int base, char conversion)
 {
 	int			count;
 	const char	*symbols;
@@ -57,4 +57,23 @@ int	print_hex(unsigned long long n, unsigned int base, char conversion)
 	n = symbols[n % base];
 	count += write(1, &n, 1);
 	return (count);
+} */
+
+void	write_buf_hexupp(long n, t_format *src, t_buffer *buf)
+{
+	char	s[BUFFER_SIZE];
+	int		len;
+
+	len = 0;
+	if (src && src->hash)
+	{
+		s[len++] = '0';
+		s[len++] = 'X';
+	}
+	
+}
+
+void	write_buf_unshex(unsigned long long n, t_format *src, t_buffer *buf)
+{
+	
 }

@@ -11,10 +11,11 @@ Specifier Effect of # Flag
 %d, %i, %u, %s, %c	No effect
 
 No effect: [c] -> '#' '+' ' ' '-' '.' '0'
-No effect: [s] -> '#' '+' ' ' '-' '.' '0'
+No effect: [s] -> '#' '+' ' ' '0'
 No effect: [d] -> '#' 
 No effect: [i] -> '#' 
-No effect: [u] -> '#' 
+No effect: [u] -> '#' '+'
+No effect: [x] -> '+'
 
 If the 0 and - flags both appear, the 0 flag is ignored.
 If a precision is given with an integer conversion (d, i, o,
@@ -23,24 +24,30 @@ printf("%-08.3d", 1); 001     $
 printf("%-08.3d"); 9551728 $ (random value)
 
  */
+int i = 42;
+int d = 22;
+unsigned int u = 123;
+unsigned int x = 255;
+char *s = "Hello";
+char c = 'A';
 
 void test_d(void)
 {
     // Right-align, minimum width 5 (default, no flag)
            // Output: |   42|
-int i = 42;
-ft_printf("%d\n", 0);
 // ft_printf(" %d %d %d %d %d %d %d", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
-// int org = printf("|%5d| |%-5d| |%+5d| |%-+5d| |%-+5d| |%05d| |%.3d| |%.d| |%5.3d|\n",i,i,i,i, i, i,i,i, i );
+	int org = printf("|%5d| |%-5d| |%+5d| |%-+5d| |%-+5d| |%05d| |%.3d| |%.d| |%5.1d| |%-+5d|\n",
+		d,d,d,d,d,d,d,d,d ,0);
 
-// int ft = ft_printf("|%5d| |%-5d| |%+5d| |%-+5d| |%-+5d| |%05d| |%.3d| |%.d| |%5.3d|\n",i,i,i,i, i, i,i,i, i );
-// if (org == ft)
-// {
-//     ft_printf("OK\n");
-//     printf("OK\n");
-// }
-// else
-//     printf("KO\n");
+	int ft = ft_printf("|%5d| |%-5d| |%+5d| |%-+5d| |%-+5d| |%05d| |%.3d| |%.d| |%5.1d| |%-+5d|\n",
+		d,d,d,d,d,d,d,d,d ,0);
+	if (org == ft)
+	{
+		ft_printf("OK\n");
+		printf("OK\n");
+	}
+	else
+		printf("KO\n");
 
 // Left-align, minimum width 5 // Output: |42   |
 // printf("|%-5d|\n", 42);      
@@ -63,72 +70,144 @@ ft_printf("%d\n", 0);
 // printf("|%5.3d|\n", 42);     // Output: |  042|
 }
 
+void	test_i(void)
+{
+	ft_printf("Test i\n");
+	int org = printf("|%5i| |%-5i| |%+5i| |%-+5i| |%-+5i| |%05i| |%.3i| |%.i| |%5.3i| |%-+5i|\n",
+		i,i,i,i, i, i,i,i, i ,0);
+
+	int ft = ft_printf("|%5i| |%-5i| |%+5i| |%-+5i| |%-+5i| |%05i| |%.3i| |%.i| |%5.3i| |%-+5i|\n",
+		i,i,i,i, i, i,i,i, i ,0);
+	if (org == ft)
+	{
+		ft_printf("OK\n");
+		printf("OK\n");
+	}
+	else
+		printf("KO\n");
+}
+
 void test_u(void)
 {
-    // Width 5, zero-padded
-printf("|%05u|\n", 123);     // Output: |00123|
+	ft_printf("Test u\n");
 
-// Width 5, left-aligned
-printf("|%-5u|\n", 123);     // Output: |123  |
+	int org = printf("|%5u| |%-5u| |%+5u| |%-+5u| |%-+5u| |%05u| |%5.2u| |%.u| |%5.3u| |%-+5u|\n",
+		u,u,u,u,u,u,u,u,u,0);
 
-// Precision 3 (at least 3 digits)
-printf("|%.3u|\n", 123);     // Output: |123|
+	int ft = ft_printf("|%5u| |%-5u| |%+5u| |%-+5u| |%-+5u| |%05u| |%5.2u| |%.u| |%5.3u| |%-+5u|\n",
+		u,u,u,u,u,u,u,u,u,0);
+	if (org == ft)
+	{
+		ft_printf("OK\n");
+		printf("OK\n");
+	}
+	else
+		printf("KO\n");
+//     // Width 5, zero-padded
+// printf("|%05u|\n", 123);     // Output: |00123|
 
-// Width 5, precision 3
-printf("|%5.3u|\n", 123);    // Output: |  123|
+// // Width 5, left-aligned
+// printf("|%-5u|\n", 123);     // Output: |123  |
+
+// // Precision 3 (at least 3 digits)
+// printf("|%.3u|\n", 123);     // Output: |123|
+
+// // Width 5, precision 3
+// printf("|%5.3u|\n", 123);    // Output: |  123|
 }
 
 void test_x(void)
 {
-    // Width 5, zero-padded
-printf("|%05x|\n", 255);     // Output: |000ff|
+	ft_printf("Test x\n");
 
-// Width 5, left-aligned
-printf("|%-5x|\n", 255);     // Output: |ff   |
+	int org = printf("|%5x| |%-5x| |%+5x| |%-+5x| |%-+5x| |%05x| |%.3x| |%.x| |%5.3x| |%-+5x|\n",
+		x,x,x,x,x,x,x,x,x,0);
 
-// Precision 3 (at least 3 digits)
-printf("|%.3x|\n", 255);     // Output: |0ff|
+	int ft = ft_printf("|%5x| |%-5x| |%+5x| |%-+5x| |%-+5x| |%05x| |%.3x| |%.x| |%5.3x| |%-+5x|\n",
+		x,x,x,x,x,x,x,x,x,0);
+	if (org == ft)
+	{
+		ft_printf("OK\n");
+		printf("OK\n");
+	}
+	else
+		printf("KO\n");
+//     // Width 5, zero-padded
+// printf("|%05x|\n", 255);     // Output: |000ff|
 
-// Width 5, precision 3
-printf("|%5.3x|\n", 255);    // Output: | 0ff|
+// // Width 5, left-aligned
+// printf("|%-5x|\n", 255);     // Output: |ff   |
 
-// Use # flag to add leading 0x for hex notation
-printf("|%#5x|\n", 255);     // Output: | 0xff|
+// // Precision 3 (at least 3 digits)
+// printf("|%.3x|\n", 255);     // Output: |0ff|
+
+// // Width 5, precision 3
+// printf("|%5.3x|\n", 255);    // Output: | 0ff|
+
+// // Use # flag to add leading 0x for hex notation
+// printf("|%#5x|\n", 255);     // Output: | 0xff|
 
 }
 
 void test_s()
 {
+	ft_printf("Test s\n");
 
-// Width 10
-printf("|%10s|\n", "Hello");   // Output: |     Hello|
+	int org = printf("|%5s| |%-5s| |%+5s| |%-+5s| |%-+5s| |%05s| |%.3s| |%.s| |%5.3s| |%-10s|\n",
+		s,s,s,s,s,s,s,s,s,s);
 
-// Left-align with width 10
-printf("|%-10s|\n", "Hello");  // Output: |Hello     |
+	int ft = ft_printf("|%5s| |%-5s| |%+5s| |%-+5s| |%-+5s| |%05s| |%.3s| |%.s| |%5.3s| |%-10s|\n",
+		s,s,s,s,s,s,s,s,s,s);
+	if (org == ft)
+	{
+		ft_printf("OK\n");
+		printf("OK\n");
+	}
+	else
+		printf("KO\n");
 
-// Left-align with width 10 Precision 3
-printf("|%-10.3s|\n", "Hello");  // Output: |Hel       |
+// // Width 10
+// printf("|%10s|\n", "Hello");   // Output: |     Hello|
 
-// Precision 3 (limits to 3 characters)
-printf("|%.3s|\n", "Hello");   // Output: |Hel|
+// // Left-align with width 10
+// printf("|%-10s|\n", "Hello");  // Output: |Hello     |
 
-// Width 10, precision 3
-printf("|%10.3s|\n", "Hello"); // Output: |       Hel|
+// // Left-align with width 10 Precision 3
+// printf("|%-10.3s|\n", "Hello");  // Output: |Hel       |
+
+// // Precision 3 (limits to 3 characters)
+// printf("|%.3s|\n", "Hello");   // Output: |Hel|
+
+// // Width 10, precision 3
+// printf("|%10.3s|\n", "Hello"); // Output: |       Hel|
 
 
 }
 
 void test_c()
 {
-    ft_printf("|%c|\n", 'A');       // Output: |A|
-    printf("|%#c|\n", 'A');      // Output: |A|
-    printf("|%+c|\n", 'A');      // Output: |A|
-    printf("|% c|\n", 'A');      // Output: |A|
-    // Width 5
-    printf("|%5c|\n", 'A');       // Output: |    A|
+	ft_printf("Test c\n");
+	int org = printf("|%5c| |%-5c| |%+5c| |%-+5c| |%-+5c| |%05c| |%.3c| |%.c| |%5.3c| |%-10c|\n",
+		c,c,c,c,c,c,c,c,c,c);
 
-    // Left-align with width 5
-    printf("|%-5c|\n", 'A');      // Output: |A    |
+	int ft = ft_printf("|%5c| |%-5c| |%+5c| |%-+5c| |%-+5c| |%05c| |%.3c| |%.c| |%5.3c| |%-10c|\n",
+		c,c,c,c,c,c,c,c,c,c);
+	if (org == ft)
+	{
+		ft_printf("OK\n");
+		printf("OK\n");
+	}
+	else
+		printf("KO\n");
+    // ft_printf("|%c|\n", 'A');       // Output: |A|
+    // printf("|%#c|\n", 'A');      // Output: |A|
+    // printf("|%+c|\n", 'A');      // Output: |A|
+    // printf("|% c|\n", 'A');      // Output: |A|
+    // // Width 5
+    // printf("|%5c|\n", 'A');       // Output: |    A|
+
+    // // Left-align with width 5
+    // printf("|%-5c|\n", 'A');      // Output: |A    |
 
 }
 
@@ -153,7 +232,8 @@ int main()
 
 test_d();
 
-// test_u();
+test_i();
+test_u();
 
 // test_x();
 

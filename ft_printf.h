@@ -17,26 +17,24 @@
 # include <stdio.h>
 # include <stdlib.h>
 
-// %[$][flags][width][.precision][length modifier]conversion
+/**  %[$][flags][width][.precision][length modifier]conversion */
 
 # define BUFFER_SIZE 1024
 
-typedef struct s_printf
+typedef struct s_format
 {
-	// flags
-	int left_align;
-	int zero_pad;
-	int plus;
-	int space;
-	int hash;
-	// width 0 - 9
-	int width;
-	// precision
-	int precision;
-	// conversion
-	char specifier;
+	int		left_align;
+	int		zero_pad;
+	int		plus;
+	int		space;
+	int		hash;
+	int		width;
+	int		precision;
+	char	specifier;
+	char	pad_char;
+	char	sign;
 
-}	t_printf;
+}	t_format;
 
 typedef struct s_buffer
 {
@@ -45,18 +43,19 @@ typedef struct s_buffer
 	int		count;
 }	t_buffer;
 
-int	ft_printf(const char *format, ...);
-int	print_char(int c);
-void flush_buffer(t_buffer *buf);
-void write_buf_char(int c, t_buffer *buf);
-int	print_str(char *str);
-int	print_digit(long n, t_printf *src);
-void	write_buf_digit(long n, t_printf *src, t_buffer *buf);
+int		ft_printf(const char *format, ...);
+void	flush_buffer(t_buffer *buf);
+void	write_buf_char(int c, t_format *src, t_buffer *buf);
+void	write_buf_str(char *str, t_format *src, t_buffer *buf);
+int		print_digit(long n, t_format *src);
+void	write_buf_digit(long n, t_format *src, t_buffer *buf);
+void	write_buf_ptr(void *ptr, t_format *src, t_buffer *buf);
 // int	print_hexupp(long n, unsigned int base);
 // int	print_unshex(unsigned long long n, unsigned int base);
-int	print_hex(unsigned long long n, unsigned int base, char conversion);
-
-int	print_ptr(void *ptr);
-void	print_struct(t_printf src);
+int		print_hex(unsigned long long n, unsigned int base, char conversion);
+int		print_ptr(void *ptr);
+void	print_struct(t_format src);
+void	write_buf_hexupp(long n, t_format *src, t_buffer *buf);
+void	write_buf_unshex(unsigned long long n, t_format *src, t_buffer *buf);
 
 #endif

@@ -13,17 +13,7 @@
 #include "ft_printf.h"
 #include <unistd.h>
 
-// int process_flags(char specifier, va_list *args)
-// {
-// 	int cnt;
-// 	(void)args;
-
-// 	cnt = 0;
-
-// 	return (cnt);
-// }
-
-void	parse_format(const char **f, t_printf *src)
+void	parse_format(const char **f, t_format *src)
 {
 	// parse flags
 	while (**f && (**f == '-' || **f == '0' || **f == '+' || **f == ' ' || **f == '#'))
@@ -64,40 +54,12 @@ void	parse_format(const char **f, t_printf *src)
 	}
 }
 
-// int	printf_format(char specifier, va_list *args)
-// {
-// 	int	count;
-
-// 	count = 0;
-// 	if (specifier == 'c')
-// 		count += print_char(va_arg(*args, int));
-// 	else if (specifier == 's')
-// 		count += print_str(va_arg(*args, char *));
-// 	else if (specifier == 'd')
-// 		count += print_digit(va_arg(*args, int));
-// 	else if (specifier == 'u')
-// 		count += print_digit(va_arg(*args, unsigned int));
-// 	else if (specifier == 'i')
-// 		count += print_digit(va_arg(*args, int));
-// 	else if (specifier == 'x')
-// 		count += print_unshex(va_arg(*args, unsigned int), 16);
-// 	else if (specifier == 'X')
-// 		count += print_hexupp(va_arg(*args, unsigned int), 16);
-// 	else if (specifier == 'p')
-// 		count += print_ptr(va_arg(*args, void *));
-// 	else if (specifier == '%')
-// 		count += write(1, &specifier, 1);
-// 	// else
-// 	// 	count += process_flags(specifier, args);
-// 	return (count);
-// }
-
 /*
-If the 0 and - flags both appear, the 0 flag is ignored.
-If a precision is given with an integer conversion (d, i, u, x, and X), the 0 flag is ignored.
-A '+' overrides a 'space' if both are used.
+	If the 0 and - flags both appear, the 0 flag is ignored.
+	If a precision is given with an integer conversion (d, i, u, x, and X), the 0 flag is ignored.
+	A '+' overrides a 'space' if both are used.
 */
-void	update_t_printf(t_printf *src)
+void	update_t_printf(t_format *src)
 {
 	if (src->zero_pad)
 	{
@@ -108,41 +70,37 @@ void	update_t_printf(t_printf *src)
 	}
 	if (src->plus && src->space)
 		src->space = 0;
+	if (src->plus && (src->specifier == 'd' || src->specifier == 'i'))
+		src->sign = '+';
+	if (src->zero_pad)
+		src->pad_char = '0';
+	else
+		src->pad_char = ' ';
 }
 
-int	printf_format(char specifier, va_list *args, t_printf *src, t_buffer *buf)
+void	printf_format(char specifier, va_list *args, t_format *src, t_buffer *buf)
 {
-	int	count;
-
-	count = 0;
-
-	// print_str("specifier: ");
-	// print_char(specifier);
-	// print_char('\n');
-	// print_struct(*src);
 	src->specifier = specifier;
 	update_t_printf(src);
-	// print_struct(*src);
 	if (specifier == 'c')
-		write_buf_char(va_arg(*args, int), buf);
+		write_buf_char(va_arg(*args, int), src, buf);
 	else if (specifier == 's')
-		count += print_str(va_arg(*args, char *));
+		write_buf_str(va_arg(*args, char *), src, buf);
 	else if (specifier == 'd')
 		write_buf_digit(va_arg(*args, int), src, buf);
 	else if (specifier == 'u')
 		write_buf_digit(va_arg(*args, unsigned int), src, buf);
 	else if (specifier == 'i')
 		write_buf_digit(va_arg(*args, int), src, buf);
-	else if (specifier == 'x' || specifier == 'X')
-		count += print_hex(va_arg(*args, unsigned int), 16, specifier);
-	else if (specifier == 'p')
-		count += print_ptr(va_arg(*args, void *));
+	// else if (specifier == 'x' || specifier == 'X')
+	// 	print_hex(va_arg(*args, unsigned int), 16, specifier);
+	// else if (specifier == 'p')
+	// 	print_ptr(va_arg(*args, void *));
 	else if (specifier == '%')
-		count += write(1, &specifier, 1);
-	return (count);
+		write_buf_char(specifier, NULL, buf);
 }
-
-void	print_struct(t_printf src)
+/* 
+void	print_struct(t_format src)
 {
 	print_str("src.hash ");
 	print_digit(src.hash, &src);
@@ -176,6 +134,7 @@ void	print_struct(t_printf src)
 	print_char(src.specifier);
 	print_char('\n');
 }
+ */
 
 void flush_buffer(t_buffer *buf)
 {
@@ -186,7 +145,7 @@ void flush_buffer(t_buffer *buf)
 	}
 }
 
-void	init_t_printf(t_printf *src)
+void	init_t_printf(t_format *src)
 {
 	src->hash = 0;
 	src->left_align = 0;
@@ -195,6 +154,7 @@ void	init_t_printf(t_printf *src)
 	src->space = 0;
 	src->width = 0;
 	src->zero_pad = 0;
+	src->sign = ' ';
 }
 
 void	init_t_buffer(t_buffer *buf)
@@ -206,7 +166,7 @@ void	init_t_buffer(t_buffer *buf)
 int	ft_printf(const char *format, ...)
 {
 	va_list		args;
-	t_printf	ft_printf;
+	t_format	ft_printf;
 	t_buffer	buf;
 
 	if (!format)
@@ -225,7 +185,7 @@ int	ft_printf(const char *format, ...)
 			printf_format(*format, &args, &ft_printf, &buf);
 		}
 		else
-			write_buf_char(*format, &buf);
+			write_buf_char(*format, NULL, &buf);
 			// count += write(1, format, 1);
 		format++;
 	}

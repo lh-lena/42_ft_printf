@@ -12,8 +12,10 @@
 
 #include "ft_printf.h"
 
-void write_buf_char(int c, t_buffer *buf)
+void write_buf_char(int c, t_format *src, t_buffer *buf)
 {
+	if (!buf)
+		return;
 	if (buf->idx >= BUFFER_SIZE)
 	{
 		flush_buffer(buf);
@@ -21,46 +23,26 @@ void write_buf_char(int c, t_buffer *buf)
 	buf->data[buf->idx++] = c;
 }
 
+/* 
 int	print_char(int c)
 {
 	write(1, &c, 1);
 	return (1);
-}
+} */
 
-int	print_str(char *str)
+void	write_buf_str(char *str, t_format *src, t_buffer *buf)
 {
-	int		count;
 	char	*s;
+	int		i;
 
+	i = 0;
 	if (!str)
 		s = "(null)";
 	else
 		s = str;
-	count = 0;
-	while (*s)
-		count += write(1, s++, 1);
-	return (count);
+	while (s[i])
+		write_buf_char(s[i++], NULL, buf);
 }
-
-/*
-void test_d(void)
-{
-// Right-align, minimum width 5 (default, no flag)
-printf("|%5d|\n", 42);       // Output: |   42|
-
-// Left-align, minimum width 5
-printf("|%-5d|\n", 42);      // Output: |42   |
-
-// Zero-pad to width 5
-printf("|%05d|\n", 42);      // Output: |00042|
-
-// Specify precision (at least 3 digits)
-printf("|%.3d|\n", 42);      // Output: |042|
-
-// Width 5 and precision 3 (note padding for width)
-printf("|%5.3d|\n", 42);     // Output: |  042|
-}
-*/
 
 int	ft_ternary_subtraction(int left, int rigth)
 {
@@ -70,19 +52,18 @@ int	ft_ternary_subtraction(int left, int rigth)
 		return (0);
 }
 
-void	write_buf_digit(long n, t_printf *src, t_buffer *buf)
+void	write_buf_digit(long n, t_format *src, t_buffer *buf)
 {
 	char	tmp[BUFFER_SIZE];
 	int		len;
 	int		padding;
+	char	pad_char;
 
 	len = 0;
 	if (n < 0)
 	{
-		if (src->plus)
-			write_buf_char('+', buf);
-		else
-			write_buf_char('-', buf);
+		if (!src->plus)
+			src->sign = '-';
 		n *= -1;
 	}
 	if (n == 0)
@@ -92,32 +73,32 @@ void	write_buf_digit(long n, t_printf *src, t_buffer *buf)
 		tmp[len++] = '0' + (n % 10);
 		n /= 10;
 	}
-	if (src->precision > len) //?// change?
+	if (src->sign == '-' || src->sign == '+')
+		tmp[len++] = src->sign;
+	// fprintf(stderr, "src->precision %d, len %d\n",src->precision, len);
+	if (src->precision >= len)
 	{
 		padding = src->precision - len;
 		while (padding--)
 			tmp[len++] = '0';
 	}
-	else if (src->precision != -1)
-		len -= src->precision;
 	padding = ft_ternary_subtraction(src->width, len);
 	if (!src->left_align && padding > 0)
 	{
-		char pad_char = (src->zero_pad) ? '0' : ' '; // change
 		while (padding--)
-			write_buf_char(pad_char, buf);
+			write_buf_char(src->pad_char, NULL, buf);
 	}
 	while (len--)
-		write_buf_char(tmp[len], buf);
+		write_buf_char(tmp[len], NULL, buf);
 	if (src->left_align && padding > 0)
 	{
 		while (padding--)
-			write_buf_char(' ', buf);
+			write_buf_char(' ', NULL, buf);
 	}
 }
 
-int i = 0;
-int	print_digit(long n, t_printf *src)
+/* int i = 0;
+int	print_digit(long n, t_format *src)
 {
 	int			count;
 	const char	*symbols;
@@ -139,5 +120,5 @@ int	print_digit(long n, t_printf *src)
 	n = symbols[n % 10];
 	count += write(1, &n, 1);
 	return (count);
-}
+} */
 

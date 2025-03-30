@@ -12,7 +12,7 @@
 
 #include "ft_printf.h"
 
-int	print_ptr(void *ptr)
+/* int	print_ptr(void *ptr)
 {
 	unsigned long long	address;
 	int					count;
@@ -24,4 +24,21 @@ int	print_ptr(void *ptr)
 	count += write(1, "0x", 2);
 	count += print_hex(address, 16, 'x');
 	return (count);
-}
+} */
+
+/* void	write_buf_ptr(void *ptr, t_format *src, t_buffer *buf)
+{
+	unsigned long long	address;
+	char				*s;
+
+	if (!ptr)
+	{
+		s = "(nil)";
+		write_buf_str(s, NULL, buf);
+		return;
+	}
+	address = (unsigned long long)ptr;
+	s = "0x";
+	write_buf_str(s, NULL, buf);
+	print_hex(address, 16, 'x');
+} */
