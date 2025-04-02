@@ -178,8 +178,11 @@ void test_s()
 // // Precision 3 (limits to 3 characters)
 // printf("|%.3s|\n", "Hello");   // Output: |Hel|
 
-// // Width 10, precision 3
-// printf("|%10.3s|\n", "Hello"); // Output: |       Hel|
+// Width 10, precision 3
+printf("|%10.3s|\n", "Hello"); // Output: |       Hel|
+
+printf("|%05s|\n", "H");      // Output: |00042|
+
 
 
 }

@@ -6,11 +6,12 @@
 #    By: ohladkov <ohladkov@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/06/11 11:45:36 by ohladkov          #+#    #+#              #
-#    Updated: 2024/11/12 22:39:22 by ohladkov         ###   ########.fr        #
+#    Updated: 2025/04/03 00:54:43 by ohladkov         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SRCS	= ft_printf.c ft_printf_utils.c ft_print_hex.c ft_print_ptr.c 
+SRCS	=	ft_printf.c ft_printf_str.c ft_print_hex.c ft_printf_digit.c \
+			format.c
 
 NAME	= libftprintf.a
 
@@ -29,6 +30,8 @@ $(NAME):	$(OBJS)
 
 %.o: %.c	$(HEAD)
 		$(CC) $(CFLAGS) -c -o $@ $<
+
+bonus: all
 
 clean:
 		rm -f *.o
