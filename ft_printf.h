@@ -6,7 +6,7 @@
 /*   By: ohladkov <ohladkov@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 15:58:25 by ohladkov          #+#    #+#             */
-/*   Updated: 2025/04/02 21:11:10 by ohladkov         ###   ########.fr       */
+/*   Updated: 2025/04/03 01:15:50 by ohladkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct s_format
 	char	specifier;
 	char	pad_char;
 	char	sign;
+	int		len;
 
 }	t_format;
 
@@ -44,18 +45,20 @@ typedef struct s_buffer
 }	t_buffer;
 
 int		ft_printf(const char *format, ...);
+void	parse_format(const char **f, t_format *src);
+void	parse_flags(const char **f, t_format *src);
+void	printf_format(char specifier, va_list *args, t_format *src, t_buffer *buf);
 void	flush_buffer(t_buffer *buf);
+void	init_t_printf(t_format *src);
+void	init_t_buffer(t_buffer *buf);
+void	update_t_printf(t_format *src);
 void	write_buf_char(int c, t_format *src, t_buffer *buf);
+void	formating_str(char *str, t_format *src, t_buffer *buf);
 void	write_buf_str(char *str, t_format *src, t_buffer *buf);
-int		print_digit(long n, t_format *src);
-void	write_buf_digit(long n, t_format *src, t_buffer *buf);
-void	write_buf_ptr(void *ptr, t_format *src, t_buffer *buf);
-// int	print_hexupp(long n, unsigned int base);
-// int	print_unshex(unsigned long long n, unsigned int base);
-int		print_hex(unsigned long long n, unsigned int base, char conversion);
-int		print_ptr(void *ptr);
-void	print_struct(t_format src);
-void	write_buf_hexupp(long n, t_format *src, t_buffer *buf);
-void	write_buf_unshex(unsigned long long n, t_format *src, t_buffer *buf);
-
+void	formating_digit(long n, t_format *src, t_buffer *buf);
+void	write_buf_digit(char *str, t_format *src, t_buffer *buf);
+int		ft_ternary_subtraction(int left, int rigth);
+void	formating_ptr(void *ptr, t_format *src, t_buffer *buf);
+void	formating_hex(unsigned long long n, t_format *src, t_buffer *buf);
+void	print_struct(t_format *src);
 #endif

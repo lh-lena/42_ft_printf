@@ -6,74 +6,49 @@
 /*   By: ohladkov <ohladkov@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 15:53:08 by ohladkov          #+#    #+#             */
-/*   Updated: 2025/03/30 00:25:18 by ohladkov         ###   ########.fr       */
+/*   Updated: 2025/04/03 00:27:33 by ohladkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-/* int	print_hexupp(long n, unsigned int base)
+void	formating_ptr(void *ptr, t_format *src, t_buffer *buf)
 {
-	int			count;
-	const char	*symbols;
-
-	symbols = "0123456789ABCDEF";
-	count = 0;
-	if (n >= base)
-		count += print_hexupp(n / base, base);
-	n = symbols[n % base];
-	count += write(1, &n, 1);
-	return (count);
+	unsigned long long	address;
+	address = (unsigned long long)ptr;
+	formating_hex(address, src, buf);
 }
 
-int	print_unshex(unsigned long long n, unsigned int base)
+void	formating_hex(unsigned long long n, t_format *src, t_buffer *buf)
 {
-	int			count;
 	const char	*symbols;
-
-	symbols = "0123456789abcdef";
-	count = 0;
-	if (n >= base)
-		count += print_unshex(n / base, base);
-	n = symbols[n % base];
-	count += write(1, &n, 1);
-	return (count);
-} */
-
-/* int	print_hex(unsigned long long n, unsigned int base, char conversion)
-{
-	int			count;
-	const char	*symbols;
-
-	if (conversion == 'x')
-		symbols = "0123456789abcdef";
-	else if (conversion == 'X')
+	int			padding;
+	char		tmp[BUFFER_SIZE];
+	
+	if (src->specifier == 'X')
 		symbols = "0123456789ABCDEF";
 	else
-		return (0);
-	count = 0;
-	if (n >= base)
-		count += print_hex(n / base, base, conversion);
-	n = symbols[n % base];
-	count += write(1, &n, 1);
-	return (count);
-} */
+		symbols = "0123456789abcdef";
 
-void	write_buf_hexupp(long n, t_format *src, t_buffer *buf)
-{
-	char	s[BUFFER_SIZE];
-	int		len;
-
-	len = 0;
-	if (src && src->hash)
+	src->len = 0;
+	if (n == 0)
+		tmp[src->len++] = '0';
+	while (n > 0)
 	{
-		s[len++] = '0';
-		s[len++] = 'X';
+		tmp[src->len++] = symbols[n % 16];
+		n /= 16;
 	}
-	
-}
-
-void	write_buf_unshex(unsigned long long n, t_format *src, t_buffer *buf)
-{
-	
+	if (src->precision >= src->len)
+	{
+		padding = src->precision - src->len;
+		while (padding--)
+			tmp[src->len++] = '0';
+	}
+	if (src->hash)
+	{
+		tmp[src->len++] = 'x';
+		tmp[src->len++] = '0';
+	}
+	tmp[src->len] = '\0';
+	write_buf_digit(tmp, src, buf);
 }

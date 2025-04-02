@@ -6,7 +6,7 @@
 /*   By: ohladkov <ohladkov@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/22 15:45:44 by ohladkov          #+#    #+#             */
-/*   Updated: 2025/04/02 21:09:47 by ohladkov         ###   ########.fr       */
+/*   Updated: 2025/04/03 00:50:57 by ohladkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,82 +14,54 @@
 
 void write_buf_char(int c, t_format *src, t_buffer *buf)
 {
+	// int	padding;
+	// int	i;
+	char	str[2];
+
 	if (!buf)
 		return;
 	if (buf->idx >= BUFFER_SIZE)
 	{
 		flush_buffer(buf);
 	}
-	buf->data[buf->idx++] = c;
+	if (!src)
+	{
+		buf->data[buf->idx++] = c;
+		return ;
+	}
+	str[0] = c;
+	str[1] = '\0';
+	src->len = 1;
+	write_buf_str(str, src, buf);
+	// padding = ft_ternary_subtraction(src->width, src->len);
+	// if (!src->left_align && padding > 0)
+	// {
+	// 	while (padding--)
+	// 		write_buf_char(src->pad_char, NULL, buf);
+	// }
+	// i = 0;
+	// write_buf_char(c, NULL, buf);
+	// if (src->left_align && padding > 0)
+	// {
+	// 	while (padding--)
+	// 		write_buf_char(' ', NULL, buf);
+	// }
 }
-
-/* 
-int	print_char(int c)
-{
-	write(1, &c, 1);
-	return (1);
-} */
 
 void	write_buf_str(char *str, t_format *src, t_buffer *buf)
 {
-	char	*s;
-	int		i;
+	int	padding;
+	int	i;
 
-	i = 0;
-	if (!str)
-		s = "(null)";
-	else
-		s = str;
-	while (s[i])
-		write_buf_char(s[i++], NULL, buf);
-}
-
-int	ft_ternary_subtraction(int left, int rigth)
-{
-	if (left > rigth)
-		return (left - rigth);
-	else
-		return (0);
-}
-
-void	write_buf_digit(long n, t_format *src, t_buffer *buf)
-{
-	char	tmp[BUFFER_SIZE];
-	int		len;
-	int		padding;
-	char	pad_char;
-
-	len = 0;
-	if (n < 0)
-	{
-		if (!src->plus)
-			src->sign = '-';
-		n *= -1;
-	}
-	if (n == 0)
-		tmp[len++] = '0';
-	while (n > 0)
-	{
-		tmp[len++] = '0' + (n % 10);
-		n /= 10;
-	}
-	if (src->sign == '-' || src->sign == '+')
-		tmp[len++] = src->sign;
-	// fprintf(stderr, "src->precision %d, len %d\n",src->precision, len);
-	if (src->precision >= len)
-	{
-		padding = src->precision - len;
-		while (padding--)
-			tmp[len++] = '0';
-	}
-	padding = ft_ternary_subtraction(src->width, len);
+	padding = ft_ternary_subtraction(src->width, src->len);
 	if (!src->left_align && padding > 0)
 	{
 		while (padding--)
 			write_buf_char(src->pad_char, NULL, buf);
 	}
-	while (len--)
-		write_buf_char(tmp[len], NULL, buf);
+	i = 0;
+	while (i < src->len)
+		write_buf_char(str[i++], NULL, buf);
 	if (src->left_align && padding > 0)
 	{
 		while (padding--)
@@ -97,28 +69,24 @@ void	write_buf_digit(long n, t_format *src, t_buffer *buf)
 	}
 }
 
-/* int i = 0;
-int	print_digit(long n, t_format *src)
+void	formating_str(char *str, t_format *src, t_buffer *buf)
 {
-	int			count;
-	const char	*symbols;
+	(void)src;
+	char	*s;
+	int		i;
 
-	count = 0;
-	symbols = "0123456789";
-	if (n < 0)
+	i = 0;
+	if (!str)
 	{
-		i++;
-		count += write (1, "-", 1);
-		n *= -1;
+		s = "(null)";
+		while (s[i])
+			write_buf_char(s[i++], NULL, buf);
+		return ;
 	}
-	if (n >= 10)
-	{
+	while (str[i])
 		i++;
-		count += print_digit(n / 10, src);
-	}
-	i++;
-	n = symbols[n % 10];
-	count += write(1, &n, 1);
-	return (count);
-} */
-
+	src->len = i;
+	if (src->precision != -1 && src->precision < src->len)
+		src->len = src->precision;
+	write_buf_str(str, src, buf);
+}
