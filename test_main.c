@@ -8,7 +8,7 @@
  */
 
 int i = 42;
-int d = 22;
+int d = -22;
 unsigned int u = 123;
 unsigned int x = 255;
 char *s = "Hello";
@@ -137,54 +137,18 @@ void test_c()
 
 }
 
-void o_test()
-{
-	ft_printf("Flag 0\n");
-	// int ft = ft_printf(" %09i %010i %011i %012i %013i %014i %015i", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
-	// int org = printf(" %09i %010i %011i %012i %013i %014i %015i", INT_MAX, INT_MIN, LONG_MAX, LONG_MIN, ULONG_MAX, 0, -42);
-
-	// if (org == ft)
-	// {
-	// 	ft_printf("OK\n");
-	// 	printf("OK\n");
-	// }
-	// else
-		// printf("KO\n");
-
-	// 	printf(" %04d \n", -14);
-	// ft_printf(" %04d \n", -14);
-	// printf(" %05d \n", -15);
-	// ft_printf(" %05d \n", -15);
-	printf(" %06d \n", -16);
-	ft_printf(" %06d \n", -16);
-	printf(" %+d\n", -10);
-	ft_printf(" %+d\n", -10);
-	// printf(" %011d ", LONG_MAX);
-	// ft_printf(" %011d ", LONG_MAX);
-	// printf(" %013d \n", UINT_MAX);
-	// ft_printf(" %013d \n", UINT_MAX);
-}
-
-void	dot_test()
-{
-
-}
-
 int main()
 {
 
-// test_d();
+test_d();
 
-// test_i();
-// test_u();
+test_i();
+test_u();
 
-// test_x();
-// test_p();
-// test_s();
-// test_c();
-
-o_test();
-
+test_x();
+test_p();
+test_s();
+test_c();
 
     return 0;
 }

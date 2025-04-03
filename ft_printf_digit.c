@@ -11,13 +11,9 @@ int	ft_ternary_subtraction(int left, int rigth)
 void	write_buf_digit(char *str, t_format *src, t_buffer *buf)
 {
 	int	padding;
-	int	sg;
 	// print_struct(src);
-	if (src->sign == '-' || src->sign == '+')
-		sg = 1;
-	else
-		sg = 0;
-	padding = ft_ternary_subtraction(src->width, src->len + sg);
+
+	padding = ft_ternary_subtraction(src->width, src->len);
 	if (!src->left_align && padding > 0)
 	{
 		while (padding--)
@@ -35,21 +31,24 @@ void	write_buf_digit(char *str, t_format *src, t_buffer *buf)
 void	formating_digit(long n, t_format *src, t_buffer *buf)
 {
 	char	tmp[BUFFER_SIZE];
+	char	res[BUFFER_SIZE];
 	int		padding;
+	long	nbr;
+	int i = 0;
 
 	src->len = 0;
-	if (n < 0)
+	nbr = n;
+	if (nbr < 0)
 	{
-		if (!src->plus)
-			src->sign = '-';
-		n *= -1;
+		src->sign = '-';
+		nbr *= -1;
 	}
-	if (n == 0)
+	if (nbr == 0)
 		tmp[src->len++] = '0';
-	while (n > 0)
+	while (nbr > 0)
 	{
-		tmp[src->len++] = '0' + (n % 10);
-		n /= 10;
+		tmp[src->len++] = '0' + (nbr % 10);
+		nbr /= 10;
 	}
 	if (src->precision >= src->len)
 	{
@@ -57,26 +56,32 @@ void	formating_digit(long n, t_format *src, t_buffer *buf)
 		while (padding--)
 			tmp[src->len++] = '0';
 	}
-	// tmp[src->len] = '\0';
+	if (src->sign != '-' && src->plus)
+		src->sign = '+';
+	while (src->len - 1 >= 0)
+		res[i++] = tmp[(src->len)-- - 1];
+	res[i] = '\0';
+	src->len = i;
+	padding = ft_ternary_subtraction(src->width, src->len);
 	if (src->sign == '-' || src->sign == '+')
-	{
-		// tmp[src->len++] = src->sign;
+		padding -= 1;
+	if (src->space && n >= 0)
+		write_buf_char(' ', NULL, buf);
+	if ((src->sign == '-' || src->sign == '+') && src->pad_char == '0')
 		write_buf_char(src->sign, NULL, buf);
+	if (!src->left_align && padding > 0)
+	{
+		while (padding--)
+			write_buf_char(src->pad_char, NULL, buf);
 	}
-	print_struct(src);
-	write_buf_digit(tmp, src, buf);
-	// int padding;
-	// padding = ft_ternary_subtraction(src->width, src->len);
-	// if (!src->left_align && padding > 0)
-	// {
-	// 	while (padding--)
-	// 		write_buf_char(src->pad_char, NULL, buf);
-	// }
-	// while ((src->len)-- && tmp[src->len])
-	// 	write_buf_char(tmp[src->len], NULL, buf);
-	// if (src->left_align && padding > 0)
-	// {
-	// 	while (padding--)
-	// 		write_buf_char(' ', NULL, buf);
-	// }
+	if ((src->sign == '-' || src->sign == '+') && src->pad_char != '0')
+		write_buf_char(src->sign, NULL, buf);
+	i = 0;
+	while (i < src->len && res[i])
+		write_buf_char(res[i++], NULL, buf);
+	if (src->left_align && padding > 0)
+	{
+		while (padding--)
+			write_buf_char(' ', NULL, buf);
+	}
 }

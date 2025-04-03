@@ -6,7 +6,7 @@
 /*   By: ohladkov <ohladkov@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 15:58:48 by ohladkov          #+#    #+#             */
-/*   Updated: 2025/04/03 01:32:58 by ohladkov         ###   ########.fr       */
+/*   Updated: 2025/04/03 21:20:46 by ohladkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,10 @@ void	update_t_printf(t_format *src)
 	}
 	if (src->plus && src->space)
 		src->space = 0;
-	if (src->plus && (src->specifier == 'd' || src->specifier == 'i'))
-		src->sign = '+';
+	if (src->space && (src->specifier != 'd' && src->specifier != 'i'))
+		src->space = 0;
+	if (src->plus && (src->specifier != 'd' && src->specifier != 'i'))
+		src->plus = 0;
 	if (src->zero_pad)
 		src->pad_char = '0';
 	else
@@ -73,6 +75,7 @@ void	init_t_printf(t_format *src)
 	src->zero_pad = 0;
 	src->len = 0;
 	src->sign = ' ';
+	src->pad_char = ' ';
 }
 
 void	init_t_buffer(t_buffer *buf)
