@@ -15,7 +15,8 @@
 
 /*
 	If the 0 and - flags both appear, the 0 flag is ignored.
-	If a precision is given with an integer conversion (d, i, u, x, and X), the 0 flag is ignored.
+	If a precision is given with an integer conversion (d, i, u, x, and X), 
+	the 0 flag is ignored.
 	A '+' overrides a 'space' if both are used.
 */
 void	update_t_printf(t_format *src)
@@ -24,7 +25,9 @@ void	update_t_printf(t_format *src)
 	{
 		if (src->left_align)
 			src->zero_pad = 0;
-		else if (src->precision != -1 && (src->specifier == 'd' || src->specifier == 'i' || src->specifier == 'u' || src->specifier == 'x' || src->specifier == 'X'))
+		else if (src->precision != -1 && (src->specifier == 'd' \
+		|| src->specifier == 'i' || src->specifier == 'u' \
+		|| src->specifier == 'x' || src->specifier == 'X'))
 			src->zero_pad = 0;
 	}
 	if (src->plus && src->space)
@@ -41,21 +44,7 @@ void	update_t_printf(t_format *src)
 		src->hash = 1;
 }
 
-void	print_struct(t_format *src)
-{
-	printf("hash: %d\nleft_align: %d\nplus: %d\nprecision: %d\nspace: %d\nwidth: %d\nzero_pad: %d\nlen: %d\nsign: %c\n",
-	src->hash,
-	src->left_align,
-	src->plus,
-	src->precision,
-	src->space,
-	src->width,
-	src->zero_pad,
-	src->len,
-	src->sign);
-}
-
-void flush_buffer(t_buffer *buf)
+void	flush_buffer(t_buffer *buf)
 {
 	if (buf->idx > 0)
 	{

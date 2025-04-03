@@ -12,14 +12,12 @@
 
 #include "ft_printf.h"
 
-void write_buf_char(int c, t_format *src, t_buffer *buf)
+void	write_buf_char(int c, t_format *src, t_buffer *buf)
 {
-	// int	padding;
-	// int	i;
 	char	str[2];
 
 	if (!buf)
-		return;
+		return ;
 	if (buf->idx >= BUFFER_SIZE)
 	{
 		flush_buffer(buf);
@@ -33,19 +31,6 @@ void write_buf_char(int c, t_format *src, t_buffer *buf)
 	str[1] = '\0';
 	src->len = 1;
 	write_buf_str(str, src, buf);
-	// padding = ft_ternary_subtraction(src->width, src->len);
-	// if (!src->left_align && padding > 0)
-	// {
-	// 	while (padding--)
-	// 		write_buf_char(src->pad_char, NULL, buf);
-	// }
-	// i = 0;
-	// write_buf_char(c, NULL, buf);
-	// if (src->left_align && padding > 0)
-	// {
-	// 	while (padding--)
-	// 		write_buf_char(' ', NULL, buf);
-	// }
 }
 
 void	write_buf_str(char *str, t_format *src, t_buffer *buf)
@@ -71,7 +56,6 @@ void	write_buf_str(char *str, t_format *src, t_buffer *buf)
 
 void	formating_str(char *str, t_format *src, t_buffer *buf)
 {
-	(void)src;
 	char	*s;
 	int		i;
 

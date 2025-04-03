@@ -1,30 +1,43 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   format.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ohladkov <ohladkov@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 21:39:19 by ohladkov          #+#    #+#             */
+/*   Updated: 2025/04/03 21:39:21 by ohladkov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_printf.h"
 
-void	printf_format(char specifier, va_list *args, t_format *src, t_buffer *buf)
+void	printf_format(char sp, va_list *args, t_format *src, t_buffer *buf)
 {
-	src->specifier = specifier;
+	src->specifier = sp;
 	update_t_printf(src);
-	if (specifier == 'c')
+	if (sp == 'c')
 		write_buf_char(va_arg(*args, int), src, buf);
-	else if (specifier == 's')
+	else if (sp == 's')
 		formating_str(va_arg(*args, char *), src, buf);
-	else if (specifier == 'd')
+	else if (sp == 'd')
 		formating_digit(va_arg(*args, int), src, buf);
-	else if (specifier == 'u')
+	else if (sp == 'u')
 		formating_digit(va_arg(*args, unsigned int), src, buf);
-	else if (specifier == 'i')
+	else if (sp == 'i')
 		formating_digit(va_arg(*args, int), src, buf);
-	else if (specifier == 'x' || specifier == 'X')
+	else if (sp == 'x' || sp == 'X')
 		formating_hex(va_arg(*args, unsigned int), src, buf);
-	else if (specifier == 'p')
+	else if (sp == 'p')
 		formating_ptr(va_arg(*args, void *), src, buf);
-	else if (specifier == '%')
-		write_buf_char(specifier, NULL, buf);
+	else if (sp == '%')
+		write_buf_char(sp, NULL, buf);
 }
 
 void	parse_flags(const char **f, t_format *src)
 {
-	while (**f && (**f == '-' || **f == '0' || **f == '+' || **f == ' ' || **f == '#'))
+	while (**f && (**f == '-' || **f == '0' || **f == '+' \
+			|| **f == ' ' || **f == '#'))
 	{
 		if (**f == '-')
 			src->left_align = 1;
@@ -43,7 +56,6 @@ void	parse_flags(const char **f, t_format *src)
 void	parse_format(const char **f, t_format *src)
 {
 	parse_flags(f, src);
-
 	if (**f && **f != '.' && **f != '0')
 	{
 		while (**f && **f >= '0' && **f <= '9')
@@ -52,7 +64,6 @@ void	parse_format(const char **f, t_format *src)
 			(*f)++;
 		}
 	}
-
 	if (**f == '.')
 	{
 		(*f)++;

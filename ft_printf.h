@@ -47,7 +47,7 @@ typedef struct s_buffer
 int		ft_printf(const char *format, ...);
 void	parse_format(const char **f, t_format *src);
 void	parse_flags(const char **f, t_format *src);
-void	printf_format(char specifier, va_list *args, t_format *src, t_buffer *buf);
+void	printf_format(char sp, va_list *args, t_format *src, t_buffer *buf);
 void	flush_buffer(t_buffer *buf);
 void	init_t_printf(t_format *src);
 void	init_t_buffer(t_buffer *buf);
@@ -60,5 +60,6 @@ void	write_buf_digit(char *str, t_format *src, t_buffer *buf);
 int		ft_ternary_subtraction(int left, int rigth);
 void	formating_ptr(void *ptr, t_format *src, t_buffer *buf);
 void	formating_hex(unsigned long long n, t_format *src, t_buffer *buf);
-void	print_struct(t_format *src);
+char	*ft_ternary_str(char sp1, char sp2, char *s1, char *s2);
+
 #endif

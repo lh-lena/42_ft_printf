@@ -1,17 +1,20 @@
-#include "ft_printf.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_print_digit.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ohladkov <ohladkov@student.42berlin.d      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/04/03 21:51:02 by ohladkov          #+#    #+#             */
+/*   Updated: 2025/04/03 21:51:03 by ohladkov         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-int	ft_ternary_subtraction(int left, int rigth)
-{
-	if (left > rigth)
-		return (left - rigth);
-	else
-		return (0);
-}
+#include "ft_printf.h"
 
 void	write_buf_digit(char *str, t_format *src, t_buffer *buf)
 {
 	int	padding;
-	// print_struct(src);
 
 	padding = ft_ternary_subtraction(src->width, src->len);
 	if (!src->left_align && padding > 0)
@@ -34,10 +37,11 @@ void	formating_digit(long n, t_format *src, t_buffer *buf)
 	char	res[BUFFER_SIZE];
 	int		padding;
 	long	nbr;
-	int i = 0;
+	int		i;
 
 	src->len = 0;
 	nbr = n;
+	i = 0;
 	if (nbr < 0)
 	{
 		src->sign = '-';
