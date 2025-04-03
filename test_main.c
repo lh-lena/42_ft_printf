@@ -150,7 +150,7 @@ test_p();
 test_s();
 test_c();
 
-    return 0;
+	return 0;
 }
 
 // #include "ft_printf.h"

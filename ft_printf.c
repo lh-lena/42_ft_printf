@@ -6,7 +6,7 @@
 /*   By: ohladkov <ohladkov@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/04 15:58:48 by ohladkov          #+#    #+#             */
-/*   Updated: 2025/04/03 21:20:46 by ohladkov         ###   ########.fr       */
+/*   Updated: 2025/04/03 22:27:42 by ohladkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,22 +25,22 @@ void	update_t_printf(t_format *src)
 	{
 		if (src->left_align)
 			src->zero_pad = 0;
-		else if (src->precision != -1 && (src->specifier == 'd' \
-		|| src->specifier == 'i' || src->specifier == 'u' \
-		|| src->specifier == 'x' || src->specifier == 'X'))
+		else if (src->precision != -1 && (src->sp == 'd' \
+		|| src->sp == 'i' || src->sp == 'u' \
+		|| src->sp == 'x' || src->sp == 'X'))
 			src->zero_pad = 0;
 	}
 	if (src->plus && src->space)
 		src->space = 0;
-	if (src->space && (src->specifier != 'd' && src->specifier != 'i'))
+	if (src->space && (src->sp != 'd' && src->sp != 'i'))
 		src->space = 0;
-	if (src->plus && (src->specifier != 'd' && src->specifier != 'i'))
+	if (src->plus && (src->sp != 'd' && src->sp != 'i'))
 		src->plus = 0;
 	if (src->zero_pad)
 		src->pad_char = '0';
 	else
 		src->pad_char = ' ';
-	if (src->specifier == 'p')
+	if (src->sp == 'p')
 		src->hash = 1;
 }
 
@@ -65,6 +65,8 @@ void	init_t_printf(t_format *src)
 	src->len = 0;
 	src->sign = ' ';
 	src->pad_char = ' ';
+	src->padding = 0;
+	src->nbr = 0;
 }
 
 void	init_t_buffer(t_buffer *buf)

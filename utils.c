@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohladkov <ohladkov@student.42berlin.d      +#+  +:+       +#+        */
+/*   By: ohladkov <ohladkov@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:41:20 by ohladkov          #+#    #+#             */
-/*   Updated: 2025/04/03 21:41:21 by ohladkov         ###   ########.fr       */
+/*   Updated: 2025/04/03 22:18:12 by ohladkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,3 +25,4 @@ char	*ft_ternary_str(char sp1, char sp2, char *s1, char *s2)
 		return (s1);
 	return (s2);
 }
+

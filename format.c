@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   format.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ohladkov <ohladkov@student.42berlin.d      +#+  +:+       +#+        */
+/*   By: ohladkov <ohladkov@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/03 21:39:19 by ohladkov          #+#    #+#             */
-/*   Updated: 2025/04/03 21:39:21 by ohladkov         ###   ########.fr       */
+/*   Updated: 2025/04/03 21:59:24 by ohladkov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	printf_format(char sp, va_list *args, t_format *src, t_buffer *buf)
 {
-	src->specifier = sp;
+	src->sp = sp;
 	update_t_printf(src);
 	if (sp == 'c')
 		write_buf_char(va_arg(*args, int), src, buf);
